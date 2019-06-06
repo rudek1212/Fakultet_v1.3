@@ -1,0 +1,56 @@
+<div class="d-flex pl-4 pt-4">
+  <div class="col-6 pl-0">
+    <h2>Oceń dokument</h2>
+
+    <div class="d-flex align-items-center mb-3">
+      <h6 class="m-0">Nazwa dokumentu</h6>
+      <p class="pl-3 m-0">{{fileEntity?.name}}</p>
+    </div>
+
+    <div class="d-flex align-items-center mb-3">
+      <h6 class="m-0">Typ dokumentu</h6>
+      <p class="pl-3 m-0">{{fileTypeTranslate[fileEntity?.documentType]}}</p>
+    </div>
+
+    <div class="d-flex align-items-center mb-3">
+      <h6 class="m-0">Autor</h6>
+      <p class="pl-3 m-0">{{fileEntity?.author}}</p>
+    </div>
+
+
+    <div class="d-flex align-items-center mb-3">
+      <h6 class="m-0">Data dodania</h6>
+      <p class="pl-3 m-0">{{fileEntity?.createDate}}</p>
+    </div>
+
+    <div class="d-flex align-items-center mb-3">
+      <h6 class="m-0">Data przedawnienia</h6>
+      <p class="pl-3 m-0">{{fileEntity?.expireDate}}</p>
+    </div>
+
+    <div class="d-flex flex-column mb-4">
+      <h4>Zgłoszone błędy</h4>
+      <ng-container *ngIf="fileEntity && fileEntity.errors && fileEntity.errors.length > 0">
+        <p *ngFor="let error of fileEntity.errors">{{error}}</p>
+      </ng-container>
+      <h6 *ngIf="fileEntity && (fileEntity.errors || fileEntity.errors.length === 0)">Brak zastrzeżeń</h6>
+    </div>
+
+    <div class="form-group">
+      <label for="errorInput">Zastrzeżenia</label>
+      <textarea class="form-control" id="errorInput" placeholder="Jeżeli masz jakieś zastrzeżenia wpisz je"
+        [formControl]="errorCtr"></textarea>
+    </div>
+
+    <div class="d-flex">
+      <button type="button" class="btn btn-primary" [disabled]="errorCtr.value && errorCtr.value.length > 0" (click)="onSignClick()">Podpisz</button>
+      <button type="button" class="btn btn-danger ml-3" [disabled]="!(errorCtr.value && errorCtr.value.length > 0)" (click)="onErrorClick()">Zgłoś zastrzeżenie</button>
+    </div>
+  </div>
+  <div class="col-6 pr-1 d-flex flex-column" style="max-height: calc(100vh - 56px - 24px);
+    overflow: auto;">
+    <p>Podgląd dokumentu</p>
+
+    <pdf-viewer [src]="fileEntity?.fileBase64" [render-text]="true" style="display: block;"></pdf-viewer>
+  </div>
+</div>

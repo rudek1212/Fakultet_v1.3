@@ -1,0 +1,62 @@
+<app-sign-base [title]="'Rejestracja'">
+
+  <div class="d-flex flex-column">
+    <form [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="loginInput">Email</label>
+        <input type="text"
+          class="form-control"
+          id="loginInput"
+          placeholder="Wpisz swój adres email"
+          [formControlName]="'email'">
+      </div>
+      <div class="form-group">
+        <label for="passwordInput">Hasło</label>
+        <input type="password"
+          class="form-control"
+          id="passwordInput"
+          placeholder="Wpisz swoje hasło"
+          [formControlName]="'password'">
+      </div>
+      <div class="form-group">
+        <label for="rePasswordInput">Powtórz hasło</label>
+        <input type="password"
+          class="form-control"
+          id="rePasswordInput"
+          placeholder="Powtórz swoje hasło"
+          [formControlName]="'rePassword'">
+      </div>
+      <div class="form-group">
+        <label for="loginInput">Imię</label>
+        <input type="text"
+          class="form-control"
+          id="loginInput"
+          placeholder="Wpisz swóje imię"
+          [formControlName]="'firstName'">
+      </div>
+      <div class="form-group">
+        <label for="loginInput">Nazwisko</label>
+        <input type="text"
+          class="form-control"
+          id="loginInput"
+          placeholder="Wpisz swóje nazwisko"
+          [formControlName]="'lastName'">
+      </div>
+
+      <div class="card border-danger mb-3"
+        *ngIf="registerForm.errors?.noMachPassword">
+        <div class="card-body text-danger">
+          <p class="card-text">Hasła nie sa identyczne!</p>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button type="submit"
+          class="btn btn-primary" [disabled]="!registerForm.valid">Zarejestruj</button>
+      </div>
+
+    </form>
+  </div>
+
+</app-sign-base>
