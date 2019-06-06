@@ -1,0 +1,5 @@
+<div>
+  <ngb-alert *ngFor="let toast of toasts" [type]="toast.type" (close)="removeToast(toast)">
+    <div [innerHTML]="toast.message"></div>
+  </ngb-alert>
+</div>

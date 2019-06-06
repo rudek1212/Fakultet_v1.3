@@ -1,0 +1,7 @@
+<app-document-base (save)="onSubmit($event)" [entity]="fileEntity" [buttonLabel]="'Zapisz zmiany'" [externalButtons]="extraButton" [title]="'Dokument'"></app-document-base>
+
+<ng-template #extraButton>
+  
+  <button type="button"
+  class="btn btn-success ml-3" (click)="onShareClick()">Udostępnij</button>
+</ng-template>

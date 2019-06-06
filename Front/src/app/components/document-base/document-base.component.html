@@ -1,0 +1,98 @@
+<div class="d-flex pl-4 pt-4">
+  <div class="col-6 pl-0">
+    <h2>{{title}}</h2>
+    <form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+      <div class="form-group" *ngIf="canChangeFile">
+        <label for="fileInput">Dokument</label>
+        <div class="input-group mb-3">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01"
+              (change)="onFileChange($event)" accept="application/pdf,application/vnd.ms-excel">
+            <label class="custom-file-label" for="inputGroupFile01">Wybierz dokument</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="documentNameInput">Nazwa dokumentu</label>
+        <input type="text" class="form-control" id="documentNameInput" placeholder="Wpisz nazwę dokumentu"
+          [formControlName]="'name'">
+      </div>
+
+      <div class="form-group">
+        <label for="selectType">Typ dokumentu</label>
+        <select class="custom-select" id="selectType" [formControlName]="'documentType'"
+          [compareWith]="defaultCompareWithFn">
+          <option [ngValue]="null">Wybierz typ dokumentu</option>
+          <option [ngValue]="selectOption.value" *ngFor="let selectOption of fileTypeOptions">{{selectOption.label}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="authorInput">Autor</label>
+        <input type="text" class="form-control" id="authorInput" placeholder="Wpisz autora"
+          [formControlName]="'author'">
+      </div>
+
+      <div class="d-flex">
+        <div class="form-group col pl-0">
+          <label for="createDateInput">Data dodania</label>
+          <input type="datetime-local" class="form-control" id="createDateInput" [formControlName]="'createDate'">
+        </div>
+        <div class="form-group col pr-0">
+          <label for="expireDateInput">Data przedawnienia</label>
+          <input type="datetime-local" class="form-control" id="expireDateInput" [formControlName]="'expireDate'">
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="documentForm.get('documentStatus')">
+        <label for="selectType">Status dokumentu</label>
+        <select class="custom-select" id="selectType" [formControlName]="'documentStatus'">
+          <option [ngValue]="null">Wybierz status dokumentu</option>
+          <option [ngValue]="selectOption.value" *ngFor="let selectOption of fileStateOptions">{{selectOption.label}}
+          </option>
+        </select>
+      </div>
+
+      <div class="d-flex flex-column" *ngIf="receivers">
+        <div class="d-flex flex-row align-items-end">
+          <div class="form-group col pl-0">
+            <label for="receiverInput">Adresaci</label>
+            <input type="text" class="form-control" id="receiverInput" [formControl]="receiverCtrl"
+              placeholder="Wpisz email adresata">
+          </div>
+          <button type="button" class="btn btn-primary mb-3" (click)="addReceiver()"
+            [disabled]="!(receiverCtrl.value) || receiverCtrl.value.length === 0 || !receiverCtrl.valid">
+            Dodaj adresata
+          </button>
+        </div>
+        <div class="d-flex align-items-center mb-2" *ngFor="let receiver of receivers">
+          <p class="mb-0 col pl-0">{{receiver}}</p>
+          <button type="button" class="btn btn-danger" (click)="removeReceiver(receiver)">Usuń</button>
+        </div>
+
+      </div>
+
+      <div class="d-flex flex-column" *ngIf="errors">
+        <h4>Zgłoszone błędy</h4>
+        <ng-container *ngIf="errors.length > 0">
+          <p *ngFor="let error of errors">{{error}}</p>
+        </ng-container>
+        <h6 *ngIf="!errors || errors.length === 0">Brak zastrzeżeń</h6>
+      </div>
+
+      <div class="d-flex">
+        <button type="submit" class="btn btn-primary"
+          [disabled]="!(documentForm.valid && pdfSrc)">{{buttonLabel}}</button>
+        <ng-container *ngTemplateOutlet="externalButtons"></ng-container>
+      </div>
+    </form>
+  </div>
+  <div class="col-6 pr-1 d-flex flex-column" style="max-height: calc(100vh - 56px - 24px);
+  overflow: auto;">
+    <p>Podgląd dokumentu</p>
+
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="display: block;"></pdf-viewer>
+  </div>
+</div>
